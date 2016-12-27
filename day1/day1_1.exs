@@ -5,8 +5,8 @@ defmodule Day1 do
 
   defp read(str) do
     case str do
-      "R" <> num -> {:r, Integer.parse(num) |> elem(0)}
-      "L" <> num -> {:l, Integer.parse(num) |> elem(0)}
+      "R" <> num -> {:r, String.to_integer(num)}
+      "L" <> num -> {:l, String.to_integer(num)}
     end
   end
 
@@ -19,32 +19,28 @@ defmodule Day1 do
     point
   end
 
-  defp transform(pos, :up, {dir, steps}) do
-    {x, y} = pos
+  defp transform({x, y}, :up, {dir, steps}) do
     case dir do
       :r -> {{x, y+steps}, :right}
       :l -> {{x, y-steps}, :left}
     end
   end
 
-  defp transform(pos, :down, {dir, steps}) do
-    {x, y} = pos
+  defp transform({x, y}, :down, {dir, steps}) do
     case dir do
       :r -> {{x, y-steps}, :left}
       :l -> {{x, y+steps}, :right}
     end
   end
   
-  defp transform(pos, :left, {dir, steps}) do
-    {x, y} = pos
+  defp transform({x, y}, :left, {dir, steps}) do
     case dir do
       :r -> {{x+steps, y}, :up}
       :l -> {{x-steps, y}, :down}
     end
   end
   
-  defp transform(pos, :right, {dir, steps}) do
-    {x, y} = pos
+  defp transform({x, y}, :right, {dir, steps}) do
     case dir do
       :r -> {{x-steps, y}, :down}
       :l -> {{x+steps, y}, :up}
@@ -61,5 +57,5 @@ end
 distance = fn({x, y}) -> x+y end
 
 {:ok, data} = File.read(fname)
-data |> String.split(", ") |> Day1.process |> distance.() |> IO.puts
+data |> String.split([", ", "\n"], trim: true) |> Day1.process |> distance.() |> IO.puts
 
